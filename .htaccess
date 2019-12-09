@@ -1,0 +1,30 @@
+# Protége le fichier .htaccess lui même
+<files monfichier.php>
+order allow,deny
+deny from all
+</files>
+
+# Empeche les listages d'index
+Options -Indexes
+
+# Refuse l'accès toutes les pages .php
+<FilesMatch "\.php">
+Order Allow,Deny
+Deny from all
+</FilesMatch>
+
+# Accepte l'accès la page index.php
+<FilesMatch "index\.php">
+Order Allow,Deny
+Allow from all
+</FilesMatch> 
+
+# Suprimme le dernier parametres dans l'url
+RewriteEngine on
+RewriteCond %{QUERY_STRING} ^(.*)&?query_var=[^&]+&?(.*)$ [NC]
+RewriteRule ^/?(.*)$ /$1?%1%2 [R=301,L]
+
+#custom error docs
+ErrorDocument 404 http://localhost:8080/phpex/Blog/?param=404noexist
+ErrorDocument 403 http://localhost:8080/phpex/Blog/?param=403noaccess
+ErrorDocument 500 http://localhost:8080/phpex/Blog/?param=500error
